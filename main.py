@@ -30,10 +30,9 @@ while True:
 
   
   # Update.
-  for hbox in obj.hitBox:
-    if( charact.didHit(hbox)):
-      print("dead" + str(i))
-      i+=1
+  if(obj.didHit(charact)):
+    print("dead" + str(i))
+    i+=1
   # Draw.
   back.animate()
   charact.animate()

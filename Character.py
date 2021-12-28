@@ -48,9 +48,29 @@ class Character:
     def drawHitBox(self):
         pygame.draw.rect(self.screen,(255,255,255),self.hitBox,2)
 
-    def didHit(self,otherHitbox):
+    def didHit(self,obj,i):
         # 0 : x , 1 : y , 2 : w , 3 : h
-        if otherHitbox[1]> self.hitBox[1] and otherHitbox[1] < self.hitBox[1] + self.hitBox[3]:
-            if otherHitbox[0]> self.hitBox[0] and otherHitbox[0] < self.hitBox[0] + self.hitBox[2]:
-                return True
-        return False
+        #right : x+w , left : x, top : y, bottom : y+h
+
+        #if rectB.right < rectA.left:
+        if obj.right(i) < self.left():
+            return False
+        #if rectB.bottom < rectA.top:
+        if obj.bottom(i) < self.top():
+            return False
+        #if rectB.left > rectA.right:
+        if obj.left(i)> self.right():
+            return False
+        #if rectB.top > rectA.bottom:
+        if obj.top(i) > self.bottom():
+            return False
+        return True
+
+    def right(self):
+        return self.hitBox[0]+self.hitBox[2]
+    def left(self):
+        return self.hitBox[0]
+    def top(self):
+        return self.hitBox[1]
+    def bottom(self):
+        return self.hitBox[1]+self.hitBox[3]

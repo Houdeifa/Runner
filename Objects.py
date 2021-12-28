@@ -21,5 +21,20 @@ class Objects:
         for i in range(len(self.cactusArray)):
             self.screen.blit(self.cactusImg,self.cactusArray[i])
             self.cactusArray[i] = (self.cactusArray[i][0]-self.cactSpeed,self.cactusArray[i][1])
-            self.hitBox[i] = self.cactusArray[i][0],self.cactusArray[i][1],self.cactusSize[0],self.cactusSize[1]
+            self.hitBox[i] = (self.cactusArray[i][0],self.cactusArray[i][1],self.cactusSize[0],self.cactusSize[1])
             pygame.draw.rect(self.screen,(255,255,255),self.hitBox[i],2)
+
+    def right(self,i):
+        return self.hitBox[i][0]+self.hitBox[i][2]
+    def left(self,i):
+        return self.hitBox[i][0]
+    def top(self,i):
+        return self.hitBox[i][1]
+    def bottom(self,i):
+        return self.hitBox[i][1]+self.hitBox[i][3]
+
+    def didHit(self,charct):
+        for i in range(len(self.hitBox)):
+            if(charct.didHit(self,i)):
+                return True
+        return False
