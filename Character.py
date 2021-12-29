@@ -56,7 +56,7 @@ class Character:
         if obj.right(i) < self.left():
             return False
         #if rectB.bottom < rectA.top:
-        if obj.bottom(i) < self.top():
+        if obj.bottom(i) < self.top ():
             return False
         #if rectB.left > rectA.right:
         if obj.left(i)> self.right():
