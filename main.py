@@ -22,13 +22,12 @@ while True:
       sys.exit()
     elif event.type == KEYDOWN and (event.key == pygame.key.key_code("space") or event.key == pygame.key.key_code("up")) :
       gameMan.charact.jump()
+    elif event.type == pygame.MOUSEBUTTONUP:
+      gameMan.MouseClick()
 
   
   # Update.
-  '''if(obj.didHit(charact)):
-    print("dead" + str(i))
-    i+=1
-    '''
+  gameMan.checkLoose()
   # Draw.
   gameMan.animate()
   pygame.display.flip()

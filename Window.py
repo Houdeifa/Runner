@@ -5,11 +5,14 @@ class Window:
     defaultMargin = 0
     buttonsBoxes = [] # (x,y,w,h)
     buttonsTextes = [] # (x,y,w,h)
-    buttonsStates = [] # 0 => normal, 1=> hoverd
+    buttonsStates = [] # 0 => normal, 1=> hoverd, 3 => desactivated
+    buttonsCallbacks = []
     buttonCounter = 0
     fontSize = 30
     WhiteColor = (255, 255, 255)
     BlackColor = (0, 0, 0)
+    GrayColor0 = (217, 217, 217)
+    GrayColor1 = (51, 51, 51)
     def __init__(self,screen):
         self.screen = screen
         width, height = self.screen.get_size()
@@ -20,24 +23,21 @@ class Window:
         if not pygame.font.get_init( ):
             raise RuntimeError( "pygame doesn't init" )
         self.myfont = pygame.font.SysFont('Font/Raleway/Raleway-VariableFont_wght.ttf', self.fontSize)
-        self.addButton("Continue")
-        self.addButton("New Game")
-        self.addButton("Quit")
-        self.yPosCalc()
 
     def animate(self):
         self.buttonState(pygame.mouse.get_pos())
         for i in range(len(self.buttonsBoxes)):
             self.drawButton(i)
 
-    def addButton(self,text):
+    def addButton(self,text,state=0,callback=None):
         self.buttonCounter += 1
         x = self.intialPos[0]
         width = self.defaultSize[0]
         height = self.defaultSize[1]
         self.buttonsBoxes.append((x,0,width,height))
         self.buttonsTextes.append(text)
-        self.buttonsStates.append(0)
+        self.buttonsStates.append(state)
+        self.buttonsCallbacks.append(callback)
     def yPosCalc(self):
         yInit = self.intialPos[1] - (self.buttonCounter*self.defaultSize[1]+(self.defaultMargin)*(self.buttonCounter-1))/2
         for i in range(len(self.buttonsBoxes)):
@@ -47,19 +47,27 @@ class Window:
         if(self.buttonsStates[i] == 0):
             buttonRender = self.myfont.render(self.buttonsTextes[i], True, self.BlackColor)
             width = 0
-        else:
+            fillColor = self.WhiteColor
+        elif(self.buttonsStates[i] == 1):
             buttonRender = self.myfont.render(self.buttonsTextes[i], True, self.WhiteColor)
             width = 2
+            fillColor = self.WhiteColor
+        else:
+            buttonRender = self.myfont.render(self.buttonsTextes[i], True, self.GrayColor0)
+            width = 0
+            fillColor = self.GrayColor1
 
         textSize = buttonRender.get_size()
         x = self.buttonsBoxes[i][0]+ self.defaultSize[0]/2 - textSize[0]/2
         y = self.buttonsBoxes[i][1]+ self.defaultSize[1]/2 - textSize[1]/2
-        pygame.draw.rect(self.screen,self.WhiteColor,self.buttonsBoxes[i],width)
+        pygame.draw.rect(self.screen,fillColor,self.buttonsBoxes[i],width)
         self.screen.blit(buttonRender,(x,y))
     
     def buttonState(self,MousePos):
         for i in range(len(self.buttonsBoxes)):
-            if(self.isMouseIn(MousePos,i)):
+            if(self.buttonsStates[i] == 3):
+                continue
+            if(self.isMouseIn(MousePos,i) ):
                self.buttonsStates[i] = 1
             else:
                self.buttonsStates[i] = 0
